@@ -1,3 +1,3 @@
-LDLIBS=-lrt -lpigpio
+LDLIBS=-lrt -lpigpio  -lpthread
 CFLAGS=-Wall
 $CC=gcc
