@@ -3,3 +3,5 @@ Ejercicios de sistemas Operativos (procesos, hilos, IPC, sincronización, etc) c
 
 uso de leds y pulsadores ... 
 
+networking in the future ?
+
