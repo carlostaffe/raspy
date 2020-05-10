@@ -3,6 +3,8 @@
 from tkinter import *
 from tkinter import messagebox
 import mood.mqueue
+import os
+
 window = Tk()
 
 window.title("Controlador de actuadores ")
@@ -19,7 +21,12 @@ def enviando():
     nro_actuador = txt1.get()
     tiempo = txt2.get()
     print (nro_actuador , tiempo);
-    messagebox.showinfo('Message title', 'Enviado correctamente')
+    cola = mood.mqueue.MessageQueue("/api-domotica" , os.O_WRONLY)
+    cadena = str(nro_actuador) + str(tiempo)
+    datos_api = bytearray (cadena,"utf-8")
+    res = cola.send(datos_api)
+    if res > 0 :
+        messagebox.showinfo('Mensaje', 'Enviado correctamente')
     
 def saliendo():
     window.quit()

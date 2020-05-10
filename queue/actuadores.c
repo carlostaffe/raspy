@@ -19,7 +19,7 @@ int main (){
 	gpioWrite(14, 0); // Set GPIO14 low.
 	//abro cola
         mqd_t mqd;
-	mqd = mq_open( "/api-domotica" , O_RDWR | O_CREAT , 0666 , NULL );
+	mqd = mq_open( "/api-domotica" , O_RDWR | O_CREAT , 0777 , NULL );
 	struct mq_attr atri;
 	mq_getattr(mqd , &atri);
 	char contenido[atri.mq_msgsize];
