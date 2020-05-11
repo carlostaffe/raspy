@@ -30,7 +30,7 @@ int main( int argc , char * argv[]) {
 	prior = 1;
 	mqd_t mqd;
 	// abro cola de mensajes existente
-	mqd = mq_open( "/api-control" , O_RDWR );
+	mqd = mq_open( "/api-control" , O_RDWR | O_CREAT , 0777 , NULL );
 	if (( mqd < 0 )){
 		perror ("mq_open()");
 		return -1;

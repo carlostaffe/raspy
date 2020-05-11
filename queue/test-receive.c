@@ -28,7 +28,7 @@ int main( int argc , char * argv[]) {
 	mqd_t mqd;
 	// abro cola de mensajes existente
 // 	mqd = mq_open( argv[1] , O_RDWR | O_NONBLOCK);
-	mqd = mq_open( argv[1] , O_RDWR );
+	mqd = mq_open( argv[1] , O_RDWR | O_CREAT , 0777 , NULL );
 	//mqd = mq_open( argv[1] , O_RDWR );
 	if (mqd < 0) {
                 perror("Error en la apertura de la Cola de Mensajes\n");
