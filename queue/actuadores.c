@@ -9,17 +9,17 @@
 int main (){
 	typedef enum {false,true} bool_t;
 	bool_t actuador[10];
-	int i, leido, numero, nro_actuador, tiempo;
+	int i, leido, numero, tmp, nro_actuador, tiempo, version;
 	char *final;
-	for (i=0;i<10;i++){	//inicializa las salidas en bajo
+	for (i=0;i<10;i++){	//inicialize in low
 		actuador[i] = false;
 	}
 	gpioInitialise();
   	gpioSetMode(14, PI_OUTPUT);  // Set GPIO14 as OUTput.
 	gpioWrite(14, 0); // Set GPIO14 low.
-	//abro cola
         mqd_t mqd;
-	mqd = mq_open( "/api-domotica" , O_RDWR | O_CREAT , 0777 , NULL );
+	//mq open or create
+	mqd = mq_open( "/api-control" , O_RDWR | O_CREAT , 0777 , NULL );
 	struct mq_attr atri;
 	mq_getattr(mqd , &atri);
 	char contenido[atri.mq_msgsize];
@@ -28,30 +28,36 @@ int main (){
 		printf("actuador %d = %d\n",i,actuador[i]);
 	}
 	while (1){
-		//leo cola
+		//blocked while mq read
 	 	leido = mq_receive(mqd,contenido,atri.mq_msgsize,NULL);
-		if (leido == 6){
-		numero  = strtol(contenido,&final,10);
-                if (final == contenido) {
-			printf("No se encontro un nro \n");
-		}
-		else {
-			nro_actuador = numero/1000;
-			tiempo = numero%1000;
-			printf ("nro_actuador  %d tiempo %d\n",nro_actuador,tiempo);
-			if (nro_actuador < 10) {
-				if (actuador[nro_actuador] == false) actuador[nro_actuador] = true; else actuador[nro_actuador] = false;
-				if (nro_actuador == 5) {if (actuador[5] == false) gpioWrite(14, 0); else gpioWrite(14, 1);} //cambia el estado SOLO si se oprime 5
-				printf("\e[1;1H\e[2J");
-				for (i=0;i<10;i++){	
-					printf("actuador %d = %d\n",i,actuador[i]);
+		if (leido == 8){
+			numero  = strtol(contenido,&final,10);
+			if (final == contenido) {
+				printf("No se encontro un nro \n");
+			}
+			else {
+				version = numero/1000000;
+				tmp = numero%1000000;
+				nro_actuador = tmp/1000;
+				tiempo = numero%1000;
+				if ( version == 1 ){
+					if ( nro_actuador < 10 ){
+						if (actuador[nro_actuador] == false) actuador[nro_actuador] = true; else actuador[nro_actuador] = false;
+						if (nro_actuador == 5) {if (actuador[5] == false) gpioWrite(14, 0); else gpioWrite(14, 1);} //change ONY if 5 is pressed
+						printf("\e[1;1H\e[2J");
+						for (i=0;i<10;i++){	
+							printf("actuador %d = %d\n",i,actuador[i]);
+						}
+						printf ("version api %d  nro_actuador %d tiempo %d\n",version,nro_actuador,tiempo);
+					}
+					else { printf ("Actuador %d no implementado :-(\n",nro_actuador); }
 				}
+				
+				else { printf ("Version %d no implementada :-(\n",version); }
 			}
-			else { printf ("Actuador %d no implementado :-(\n",nro_actuador); }
-			}
-	        }
-		else { printf ("No se implemento la API :-(\n"); }
 	}
+	else { printf ("No se respeta la API :-(\n"); }
 
+	}
 	return 0;
 }

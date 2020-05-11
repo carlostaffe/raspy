@@ -21,7 +21,7 @@ def enviando():
     nro_actuador = txt1.get()
     tiempo = txt2.get()
     print (nro_actuador , tiempo);
-    cola = mood.mqueue.MessageQueue("/api-domotica" , os.O_WRONLY)
+    cola = mood.mqueue.MessageQueue("/api-control" , os.O_WRONLY)
     cadena = str(nro_actuador) + str(tiempo)
     datos_api = bytearray (cadena,"utf-8")
     res = cola.send(datos_api)

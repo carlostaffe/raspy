@@ -7,17 +7,17 @@
 typedef enum {false,true} bool_t;
 bool_t actuador[10];
 
-void *lee_sensores_actua() {
+void *lee_teclas_actua() {
 	int nro_actuador;
 	while (1){
 		scanf("%d", &nro_actuador);
-		if (nro_actuador == 99 ) kill(getpid(),2); //me suicidio
+		if (nro_actuador == 99 ) kill(getpid(),2); //termina el proceso
 		if (actuador[nro_actuador] == false) actuador[nro_actuador] = true; else actuador[nro_actuador] = false;
 		if (nro_actuador == 5) {if (actuador[5] == false) gpioWrite(14, 0); else gpioWrite(14, 1);} //cambia el estado SOLO si se oprime 5
 	}
 	pthread_exit(NULL);
 }
-void *muestra_estado() {
+void *visualiza() {
 	int i;
 	while (1){
 		for (i=0;i<10;i++){	
@@ -40,8 +40,8 @@ int main (){
 	gpioInitialise();
   	gpioSetMode(14, PI_OUTPUT);  // Set GPIO14 as OUTput.
 	gpioWrite(14, 0); // Set GPIO14 low.
-	pthread_create (&tid1, NULL, lee_sensores_actua, NULL);
-	pthread_create (&tid2, NULL, muestra_estado, NULL);
+	pthread_create (&tid1, NULL, lee_teclas_actua, NULL);
+	pthread_create (&tid2, NULL, visualiza, NULL);
 	pthread_join (tid1,NULL);
 	pthread_join (tid2,NULL);
 	return 0;

@@ -30,7 +30,7 @@ int main( int argc , char * argv[]) {
 	prior = 1;
 	mqd_t mqd;
 	// abro cola de mensajes existente
-	mqd = mq_open( "/api-domotica" , O_RDWR );
+	mqd = mq_open( "/api-control" , O_RDWR );
 	if (( mqd < 0 )){
 		perror ("mq_open()");
 		return -1;
