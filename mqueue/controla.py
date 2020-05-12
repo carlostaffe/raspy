@@ -1,5 +1,5 @@
+#!/usr/bin/python3
 ##pip3 install mood.mqueue
-
 from tkinter import *
 from tkinter import messagebox
 import mood.mqueue
