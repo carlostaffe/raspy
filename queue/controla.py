@@ -21,10 +21,10 @@ def enviando():
     nro_actuador = txt1.get()
     tiempo = txt2.get()
     print (nro_actuador , tiempo);
-    cola = mood.mqueue.MessageQueue("/api-control" , os.O_WRONLY)
+    cola_api = mood.mqueue.MessageQueue("/api-control" , os.O_WRONLY)
     cadena = "01"+str(nro_actuador) + str(tiempo)
-    datos_api = bytearray (cadena,"utf-8")
-    res = cola.send(datos_api)
+    datos_proto = bytearray (cadena,"utf-8")
+    res = cola_api.send(datos_proto)
     if res > 0 :
         messagebox.showinfo('Mensaje', 'Enviado correctamente')
     

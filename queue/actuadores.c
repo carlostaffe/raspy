@@ -48,15 +48,15 @@ int main (){
 						for (i=0;i<10;i++){	
 							printf("actuador %d = %d\n",i,actuador[i]);
 						}
-						printf ("version api %d  nro_actuador %d tiempo %d\n",version,nro_actuador,tiempo);
+						printf ("version proto %d  nro_actuador %d tiempo %d\n",version,nro_actuador,tiempo);
 					}
 					else { printf ("Actuador %d no implementado :-(\n",nro_actuador); }
 				}
 				
-				else { printf ("Version %d no implementada :-(\n",version); }
+				else { printf ("Version %d del protocolo no implementada :-(\n",version); }
 			}
 	}
-	else { printf ("No se respeta la API :-(\n"); }
+	else { printf ("No se respeta el protocolo :-(\n"); }
 
 	}
 	return 0;
