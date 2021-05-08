@@ -15,7 +15,7 @@ int entra_a_cinta()
 	// Read some data
 	uint8_t value = gpioRead(04);
         // wait a bit
-        gpioSleep(PI_TIME_RELATIVE, 0, 200000); // sleep for 0.5 seconds
+        gpioSleep(PI_TIME_RELATIVE, 0, 200000); // sleep for 0.2 seconds
 	
     return value;
 }

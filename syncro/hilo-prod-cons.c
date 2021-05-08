@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <semaphore.h>
 
-int lugares = 5;
+int lugares = 4;
 sem_t vacio;
 sem_t lleno;
 pthread_mutex_t exclusion = PTHREAD_MUTEX_INITIALIZER;
@@ -26,12 +26,12 @@ void *hilo_produce() {
 	int entra_a_cinta();
 	while( 1 ) {
 		if ( entra_a_cinta() == 0 ){
-				sem_wait(&vacio);
-				sem_post(&lleno);
-				pthread_mutex_lock(&exclusion);
-				lugares--;
-				printf("Produce... quedan %d lugares\n",lugares);
-				pthread_mutex_unlock(&exclusion);
+			sem_wait(&vacio);
+			pthread_mutex_lock(&exclusion);
+			lugares--;
+			printf("Produce... quedan %d lugares\n",lugares);
+			pthread_mutex_unlock(&exclusion);
+			sem_post(&lleno);
 		}
 	}
 	pthread_exit(NULL);
@@ -40,14 +40,15 @@ void *hilo_consume() {
 	void activa_motor(void);
 	while( 1 ) {
 		sem_wait(&lleno);
-		sem_post(&vacio);
-		sleep(2);
 		pthread_mutex_lock(&exclusion);
 		lugares++;
 		printf("Consume... quedan %d lugares\n",lugares);
 		//activa un motor
 		activa_motor();
 		pthread_mutex_unlock(&exclusion);
+		sem_post(&vacio);
+
+		sleep(2);
 	}
 	pthread_exit(NULL);
 }
@@ -56,14 +57,15 @@ int main(int argc, char *argv[])
 {
     pthread_t hilo_p,hilo_c;
     int rc;
-	sem_init(&vacio,0, 4); //inicializado en 4
-	sem_init(&lleno,0, 0); //inicializado en 0
-    rc = pthread_create(&hilo_c, NULL, hilo_consume, NULL);
+    printf("Esperando ... inicialmente %d lugares \n", lugares);
+    sem_init(&vacio,0, 4); //inicializado en 4
+    sem_init(&lleno,0, 0); //inicializado en 0
+    rc = pthread_create(&hilo_p, NULL, hilo_produce, NULL);
     if (rc) {
 	printf("ERROR: pthread_create() = %d\n", rc);
 	exit(-1);
     }
-    rc = pthread_create(&hilo_p, NULL, hilo_produce, NULL);
+    rc = pthread_create(&hilo_c, NULL, hilo_consume, NULL);
     if (rc) {
 	printf("ERROR: pthread_create() = %d\n", rc);
 	exit(-1);

@@ -1,3 +1,4 @@
+#!/usr/bin/python3 
 from gpiozero import Button
 from time import sleep
 
