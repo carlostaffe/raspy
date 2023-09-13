@@ -1,0 +1,18 @@
+agregar en /etc/modules
+i2c-dev
+
+modprobe i2c-dev
+
+para python
+git clone https://github.com/adafruit/Adafruit_Python_PCA9685.git
+cd Adafruit_Python_PCA9685
+sudo python setup.py install
+
+
+para C
+https://github.com/Reinbert/pca9685
+apt install wiringpi
+
+ver ejemplo de manejo de led
+https://github.com/Reinbert/pca9685/blob/master/examples/leds.c
+
